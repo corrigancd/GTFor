@@ -1,0 +1,48 @@
+extends layout
+block content
+
+    form(action='/filter')
+        select(name='name' required)
+            option(disabled='', selected='', value='') Select a species to filter by...
+            option(value='SS') Sitka spruce
+            option(value='DF') Douglas fir
+            option(value='OAK') Oak
+            option(value='NS') Norway spruce
+        input(type='submit', value='Submit')
+
+
+    #map
+
+
+    script.
+        var myData = !{JSON.stringify(jsonData)};
+        // Create variable to hold map element, give initial settings to map
+        var map = L.map('map', {center: [53.027799, -6.135364], zoom: 14});
+
+        // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZWR3aW50Y29ycmlnYW4iLCJhIjoiY2pvbzd0ajFyMDFmeTNrc3V2eGJreG1nbiJ9.iWd5NIlki4oMBDdVSVxI6g', {
+        // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        //
+        // L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        //     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'.
+
+        // Add ESRI open world tile layer to map element. More can be found at: https://leaflet-extras.github.io/leaflet-providers/preview/
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            id: 'mapbox.satellite'
+        }).addTo(map);
+
+        // Add spatial data to map
+        var test = L.geoJson(myData, {
+            onEachFeature: function (feature, layer) {
+            if (feature.properties) { //adds the features to a popup window on the map if they exist
+                layer.bindPopup(`Sub compartment ID: ${feature.properties.f1} <br> Species: ${feature.properties.f2} <br> Age: ${feature.properties.f3} <br> Area: ${feature.properties.f4} `, {
+                    maxHeight: 200
+                });
+            }
+        }
+        }).addTo(map);
+
+        var marker =  L.marker([53.031527725307676,-6.147130494465812]).addTo(map); // this is a point on the map
+        var marker2 = L.marker([-6.147130494465812,53.031527725307676]).addTo(map); // Just in case lat long is swapped, this point shows where it is
+
+
