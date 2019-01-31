@@ -1,7 +1,7 @@
 extends layout
 block content
 
-    form(action='map/filter')
+    form(action='/filter')
         select(name='name' required)
             option(disabled='', selected='', value='') Select a species to filter by...
             option(value='SS') Sitka spruce
