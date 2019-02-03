@@ -1,0 +1,29 @@
+
+extends layout
+block content
+
+    h1 Custom Checkboxes
+
+    form(action='table/test')
+        h2 Select your Species
+        each sp in ['ASH', 'BEE', 'BI', 'DF', 'L', 'LP', 'MP', 'OAK', 'SC', 'SAB', 'SP', 'SS', 'WRC']
+            input(type='checkbox' value = sp name = "species")
+            = sp
+        br
+
+        h2 Select your Yield Classes
+        each yc in [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
+            input(type='checkbox' value = yc name = "yc")
+            = yc
+
+        h2 Select your Forest Metrics
+        each yieldesp, yldcode in {ytopht: 'Top height', ysph: 'Standing Stems', ythsph: 'Thinned Stems', ythvol: 'Gross thinning volume', ythdia: 'Average diameter of thinned stems', ythav: 'Average size of thineed trees', ycfvol: 'Gross clearfell volume', ycfdia: 'Average diameter of clearfelled trees', ycfav: 'Average size of cleafelled tree'}
+            input(type='checkbox' value = yldcode name = "yield")
+            = yieldesp
+            br
+        br
+        br
+        input(type='submit', value='Submit')
+
+    script.
+
